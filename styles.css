@@ -283,6 +283,8 @@ a:focus-visible { outline: 3px solid rgb(36 87 214 / 24%); outline-offset: 2px; 
 
 .sources { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
 
+.more-via-x { margin: 7px 0 0; color: var(--muted); font-size: 11px; }
+
 .source-link {
   display: inline-flex;
   min-height: 32px;

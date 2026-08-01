@@ -62,10 +62,6 @@ function recentlyUpdated(value) {
   return age >= 0 && age <= 48 * 60 * 60 * 1000;
 }
 
-function sourceOrder(type) {
-  return { article: 0, github: 1, web: 2, x: 3 }[type] ?? 2;
-}
-
 function sourceIcon(type) {
   if (type === "x" || type === "github") {
     const label = type === "x" ? "X" : "GH";
@@ -100,10 +96,11 @@ function render() {
   const colorFor = area => areaColors[areas.indexOf(area) % areaColors.length];
 
   elements.cards.innerHTML = records.map(record => {
+    const relatedXCount = record.sources.filter(source => source.type === "x").length;
     const sources = [...record.sources]
-      .sort((a, b) => sourceOrder(a.type) - sourceOrder(b.type))
       .map(source => `<a class="source-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(source.type)}: ${escapeHtml(source.label)}">${sourceIcon(source.type)}<span>${escapeHtml(source.label)}</span></a>`)
       .join("");
+    const moreViaX = relatedXCount > 1 ? '<p class="more-via-x">More via X</p>' : "";
     const updated = recentlyUpdated(record.contentUpdatedAt) ? '<span class="updated-badge">Updated</span>' : "";
 
     return `
@@ -120,6 +117,7 @@ function render() {
           </div>
           <h2>${escapeHtml(record.action)}</h2>
           <div class="sources">${sources}</div>
+          ${moreViaX}
         </div>
       </article>`;
   }).join("");
