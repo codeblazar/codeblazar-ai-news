@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Useful AI ideas from Pete Kenny's X bookmarks, distilled into practical actions.">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Codeblazar AI News">
+  <meta property="og:description" content="Useful AI ideas, distilled into practical actions.">
+  <meta property="og:url" content="https://ainews.codeblazar.org/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Codeblazar AI News">
+  <meta name="twitter:description" content="Useful AI ideas, distilled into practical actions.">
+  <title>Codeblazar AI News</title>
+  <link rel="icon" href="assets/codeblazar-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Codeblazar AI News home">
+        <span class="brand-mark" aria-hidden="true"><img src="assets/codeblazar-icon.svg" alt=""></span>
+        <span>
+          <strong>Codeblazar AI News</strong>
+          <small>Useful AI ideas, turned into actions</small>
+        </span>
+      </a>
+      <div class="header-actions">
+        <div id="weather" class="weather" aria-label="Current weather in Singapore" hidden>
+          <span id="weather-icon" class="weather-icon" aria-hidden="true"></span>
+          <span>
+            <strong>Singapore</strong>
+            <small id="weather-summary"></small>
+          </span>
+        </div>
+        <a class="follow-button" href="https://x.com/report_the_news" target="_blank" rel="noopener noreferrer">Follow on X</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">What to try next in AI</h1>
+      </div>
+      <div class="updated-panel">
+        <span>Site updated</span>
+        <strong id="site-updated">Loading...</strong>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Filter actions">
+      <label class="search-field">
+        <span>Search</span>
+        <input id="search" type="search" placeholder="Search actions and sources" autocomplete="off">
+      </label>
+      <label>
+        <span>Area</span>
+        <select id="area"><option value="All">All areas</option></select>
+      </label>
+      <label>
+        <span>Usefulness</span>
+        <select id="usefulness">
+          <option value="All">All ratings</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+        </select>
+      </label>
+      <button id="clear-filters" class="clear-button" type="button">Clear filters</button>
+    </section>
+
+    <div class="results-heading" aria-live="polite">
+      <strong><span id="result-count">0</span> actions</strong>
+      <span>Newest supporting post first</span>
+    </div>
+
+    <section id="cards" class="card-grid" aria-label="AI actions"></section>
+    <p id="empty-state" class="empty-state" hidden>No actions match those filters.</p>
+    <p id="error-state" class="error-state" hidden>The dashboard data could not be loaded. Please try again later.</p>
+  </main>
+
+  <footer>
+    <p>Codeblazar AI News turns selected bookmarks into practical next steps. Sources remain with their original publishers.</p>
+  </footer>
+</body>
+</html>
