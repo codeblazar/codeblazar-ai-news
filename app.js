@@ -95,12 +95,21 @@ function render() {
   const areas = [...new Set(state.records.map(record => record.area))].sort();
   const colorFor = area => areaColors[areas.indexOf(area) % areaColors.length];
 
-  elements.cards.innerHTML = records.map(record => {
-    const relatedXCount = record.sources.filter(source => source.type === "x").length;
-    const sources = [...record.sources]
-      .map(source => `<a class="source-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(source.type)}: ${escapeHtml(source.label)}">${sourceIcon(source.type)}<span>${escapeHtml(source.label)}</span></a>`)
+  elements.cards.innerHTML = records.map((record, recordIndex) => {
+    const originalX = record.sources.find(source => source.type === "x");
+    const orderedSources = [
+      ...(originalX ? [originalX] : []),
+      ...record.sources.filter(source => source.type !== "x"),
+      ...record.sources.filter(source => source.type === "x" && source !== originalX)
+    ];
+    const sourceListId = `card-sources-${recordIndex}`;
+    const hiddenSourceCount = Math.max(orderedSources.length - 3, 0);
+    const sources = orderedSources
+      .map((source, sourceIndex) => `<a class="source-link${sourceIndex >= 3 ? " extra-source" : ""}" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(source.type)}: ${escapeHtml(source.label)}"${sourceIndex >= 3 ? " hidden" : ""}>${sourceIcon(source.type)}<span>${escapeHtml(source.label)}</span></a>`)
       .join("");
-    const moreViaX = relatedXCount > 1 ? '<p class="more-via-x">More via X</p>' : "";
+    const sourceToggle = hiddenSourceCount
+      ? `<button class="source-toggle" type="button" aria-expanded="false" aria-controls="${sourceListId}" data-more-label="+${hiddenSourceCount} more">+${hiddenSourceCount} more</button>`
+      : "";
     const updated = recentlyUpdated(record.contentUpdatedAt) ? '<span class="updated-badge">Updated</span>' : "";
 
     return `
@@ -116,14 +125,23 @@ function render() {
             <span class="rating">${escapeHtml(record.usefulness)}</span>
           </div>
           <h2>${escapeHtml(record.action)}</h2>
-          <div class="sources">${sources}</div>
-          ${moreViaX}
+          <div class="sources" id="${sourceListId}">${sources}${sourceToggle}</div>
         </div>
       </article>`;
   }).join("");
 
   elements.cards.querySelectorAll(".brand-icon img").forEach(icon => {
     icon.addEventListener("error", () => icon.closest(".brand-icon").classList.add("icon-missing"), { once: true });
+  });
+
+  elements.cards.querySelectorAll(".source-toggle").forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      const sourceList = document.getElementById(toggle.getAttribute("aria-controls"));
+      sourceList.querySelectorAll(".extra-source").forEach(source => { source.hidden = expanded; });
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      toggle.textContent = expanded ? toggle.dataset.moreLabel : "Show less";
+    });
   });
 
   elements.count.textContent = records.length;

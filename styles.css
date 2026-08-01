@@ -283,8 +283,6 @@ a:focus-visible { outline: 3px solid rgb(36 87 214 / 24%); outline-offset: 2px; 
 
 .sources { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
 
-.more-via-x { margin: 7px 0 0; color: var(--muted); font-size: 11px; }
-
 .source-link {
   display: inline-flex;
   min-height: 32px;
@@ -302,6 +300,23 @@ a:focus-visible { outline: 3px solid rgb(36 87 214 / 24%); outline-offset: 2px; 
 }
 
 .source-link:hover { border-color: var(--area-color); color: var(--area-color); background: #fff; }
+.source-link[hidden] { display: none; }
+
+.source-toggle {
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--area-color);
+  background: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.source-toggle:hover { border-color: var(--area-color); background: color-mix(in srgb, var(--area-color) 5%, white); }
+.source-toggle:focus-visible { outline: 2px solid var(--area-color); outline-offset: 2px; }
 
 .source-icon {
   display: inline-grid;
