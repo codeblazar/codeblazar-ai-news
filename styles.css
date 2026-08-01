@@ -274,8 +274,14 @@ a:focus-visible { outline: 3px solid rgb(36 87 214 / 24%); outline-offset: 2px; 
 
 .area-name { color: var(--area-color); font-size: 13px; font-weight: 800; }
 
+.topic-brand-icon img { display: block; width: 18px; height: 18px; }
+.topic-brand-icon span { display: none; font-size: 10px; }
+.topic-brand-icon.icon-missing img { display: none; }
+.topic-brand-icon.icon-missing span { display: block; }
+
 .action-card h2 {
   margin: 13px 0 18px;
+  color: var(--area-color);
   font-size: 17px;
   line-height: 1.42;
   letter-spacing: -.01em;

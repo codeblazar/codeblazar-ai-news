@@ -18,6 +18,12 @@ const elements = {
 };
 
 const areaColors = ["#2457d6", "#8a3ffc", "#087f5b", "#c2410c", "#b42318", "#0369a1"];
+const topicBrands = {
+  Claude: { color: "#D97757", asset: "claude.svg", fallback: "C" },
+  Codex: { color: "#000000", asset: "openai.svg", fallback: ">_" },
+  Grok: { color: "#000000", asset: "grok.svg", fallback: "G" },
+  n8n: { color: "#EA4B71", asset: "n8n.svg", fallback: "n8n" }
+};
 const dataUrl = "https://n8n-nuc.codeblazar.org/webhook/codeblazar-ai-news";
 
 const weatherDetails = code => {
@@ -80,6 +86,18 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function cardHeading(action) {
+  const text = String(action || "");
+  const colon = text.indexOf(":");
+  return colon === -1 ? text : text.slice(colon + 1).trim() || text;
+}
+
+function topicBrand(record) {
+  if (/^Other AI:\s*Grok\b/i.test(record.action)) return { name: "Grok", ...topicBrands.Grok };
+  const name = Object.keys(topicBrands).find(topic => topic.toLowerCase() === String(record.area).toLowerCase());
+  return name ? { name, ...topicBrands[name] } : null;
+}
+
 function render() {
   const query = state.search.trim().toLowerCase();
   const records = state.records
@@ -96,6 +114,11 @@ function render() {
   const colorFor = area => areaColors[areas.indexOf(area) % areaColors.length];
 
   elements.cards.innerHTML = records.map((record, recordIndex) => {
+    const brand = topicBrand(record);
+    const topicName = brand?.name || record.area;
+    const topicIcon = brand
+      ? `<span class="area-icon topic-brand-icon" aria-hidden="true"><img src="assets/${brand.asset}" alt=""><span>${escapeHtml(brand.fallback)}</span></span>`
+      : `<span class="area-icon" aria-hidden="true">${escapeHtml(record.icon)}</span>`;
     const originalX = record.sources.find(source => source.type === "x");
     const orderedSources = [
       ...(originalX ? [originalX] : []),
@@ -113,18 +136,18 @@ function render() {
     const updated = recentlyUpdated(record.contentUpdatedAt) ? '<span class="updated-badge">Updated</span>' : "";
 
     return `
-      <article class="action-card" style="--area-color: ${colorFor(record.area)}">
+      <article class="action-card" style="--area-color: ${brand?.color || colorFor(record.area)}">
         <div class="card-body">
           <div class="card-date-row">
             <time class="card-date" datetime="${record.latestPostDate}">Latest post · ${formatDate(record.latestPostDate)}</time>
             ${updated}
           </div>
           <div class="card-label-row">
-            <span class="area-icon" aria-hidden="true">${escapeHtml(record.icon)}</span>
-            <span class="area-name">${escapeHtml(record.area)}</span>
+            ${topicIcon}
+            <span class="area-name">${escapeHtml(topicName)}</span>
             <span class="rating">${escapeHtml(record.usefulness)}</span>
           </div>
-          <h2>${escapeHtml(record.action)}</h2>
+          <h2>${escapeHtml(cardHeading(record.action))}</h2>
           <div class="sources" id="${sourceListId}">${sources}${sourceToggle}</div>
         </div>
       </article>`;
@@ -132,6 +155,10 @@ function render() {
 
   elements.cards.querySelectorAll(".brand-icon img").forEach(icon => {
     icon.addEventListener("error", () => icon.closest(".brand-icon").classList.add("icon-missing"), { once: true });
+  });
+
+  elements.cards.querySelectorAll(".topic-brand-icon img").forEach(icon => {
+    icon.addEventListener("error", () => icon.closest(".topic-brand-icon").classList.add("icon-missing"), { once: true });
   });
 
   elements.cards.querySelectorAll(".source-toggle").forEach(toggle => {
