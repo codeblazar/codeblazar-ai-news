@@ -21,8 +21,8 @@ Dashboard data is loaded from the read-only `Codeblazar AI News API` workflow in
 - `app.js`: filtering, sorting and rendering
 - `assets/`: Codeblazar branding and local source icons with text fallbacks
 - `data/bookmarks.json`: local sample data retained for reference
-- `CNAME`: intended GitHub Pages custom domain
+- `CNAME`: GitHub Pages custom domain
 
-## Publishing status
+## Publishing
 
-This project has not been published. GitHub Pages, DNS and the production n8n schedule must be configured only after explicit approval.
+GitHub Pages deploys the site from `main` using the Pages workflow. The intended custom domain is `ainews.codeblazar.org`.
