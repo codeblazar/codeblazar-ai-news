@@ -1,5 +1,6 @@
 const state = {
   records: [],
+  topStories: [],
   search: "",
   area: "All",
   usefulness: "All"
@@ -11,6 +12,8 @@ const elements = {
   usefulness: document.querySelector("#usefulness"),
   clear: document.querySelector("#clear-filters"),
   cards: document.querySelector("#cards"),
+  topStories: document.querySelector("#top-stories"),
+  topStoriesEmpty: document.querySelector("#top-stories-empty"),
   count: document.querySelector("#result-count"),
   updated: document.querySelector("#site-updated"),
   empty: document.querySelector("#empty-state"),
@@ -96,6 +99,32 @@ function topicBrand(record) {
   if (/^Other AI:\s*Grok\b/i.test(record.action)) return { name: "Grok", ...topicBrands.Grok };
   const name = Object.keys(topicBrands).find(topic => topic.toLowerCase() === String(record.area).toLowerCase());
   return name ? { name, ...topicBrands[name] } : null;
+}
+
+function renderTopStories() {
+  const stories = state.topStories.slice(0, 6);
+  elements.topStories.innerHTML = stories.map(story => {
+    const title = story.title || story.headline || "Untitled story";
+    const summary = story.summary || story.description || "";
+    const source = story.source || story.publisher || "Original source";
+    const publishedAt = story.publishedAt || story.date;
+    const date = publishedAt ? `<time datetime="${escapeHtml(publishedAt)}">${formatDate(String(publishedAt).slice(0, 10))}</time>` : "";
+    const link = story.url
+      ? `<a class="story-link" href="${escapeHtml(story.url)}" target="_blank" rel="noopener noreferrer">Read story</a>`
+      : "";
+
+    return `
+      <article class="story-card">
+        <div class="story-meta">
+          <span class="story-source">${escapeHtml(source)}</span>
+          ${date}
+        </div>
+        <h3>${escapeHtml(title)}</h3>
+        ${summary ? `<p>${escapeHtml(summary)}</p>` : ""}
+        ${link}
+      </article>`;
+  }).join("");
+  elements.topStoriesEmpty.hidden = stories.length !== 0;
 }
 
 function render() {
@@ -200,9 +229,11 @@ fetch(dataUrl)
     return response.json();
   })
   .then(data => {
-    state.records = data.records;
+    state.records = Array.isArray(data.records) ? data.records : [];
+    state.topStories = Array.isArray(data.topStories) ? data.topStories : [];
     elements.updated.textContent = formatDate(data.siteUpdatedAt, true);
     populateAreas();
+    renderTopStories();
     render();
   })
   .catch(() => {

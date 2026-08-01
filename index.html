@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Useful AI ideas from Pete Kenny's X bookmarks, distilled into practical actions.">
+  <meta name="description" content="Today’s important AI stories and ideas worth saving.">
   <meta name="theme-color" content="#f5f7fb">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Codeblazar AI News">
-  <meta property="og:description" content="Useful AI ideas, distilled into practical actions.">
+  <meta property="og:description" content="Today’s important AI stories and ideas worth saving.">
   <meta property="og:url" content="https://ainews.codeblazar.org/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Codeblazar AI News">
-  <meta name="twitter:description" content="Useful AI ideas, distilled into practical actions.">
+  <meta name="twitter:description" content="Today’s important AI stories and ideas worth saving.">
   <title>Codeblazar AI News</title>
   <link rel="icon" href="assets/codeblazar-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
@@ -24,7 +24,7 @@
         <span class="brand-mark" aria-hidden="true"><img src="assets/codeblazar-icon.svg" alt=""></span>
         <span>
           <strong>Codeblazar AI News</strong>
-          <small>Useful AI ideas, turned into actions</small>
+          <small>Today’s important stories and ideas worth saving</small>
         </span>
       </a>
       <div class="header-actions">
@@ -51,38 +51,55 @@
       </div>
     </section>
 
-    <section class="controls" aria-label="Filter actions">
-      <label class="search-field">
-        <span>Search</span>
-        <input id="search" type="search" placeholder="Search actions and sources" autocomplete="off">
-      </label>
-      <label>
-        <span>Area</span>
-        <select id="area"><option value="All">All areas</option></select>
-      </label>
-      <label>
-        <span>Usefulness</span>
-        <select id="usefulness">
-          <option value="All">All ratings</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-        </select>
-      </label>
-      <button id="clear-filters" class="clear-button" type="button">Clear filters</button>
+    <section class="content-section" aria-labelledby="top-stories-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Updated daily</p>
+          <h2 id="top-stories-title">Top Stories</h2>
+        </div>
+      </div>
+      <div id="top-stories" class="story-grid"></div>
+      <p id="top-stories-empty" class="section-empty">Today’s stories are being prepared.</p>
     </section>
 
-    <div class="results-heading" aria-live="polite">
-      <strong><span id="result-count">0</span> actions</strong>
-      <span>Newest supporting post first</span>
-    </div>
+    <section class="content-section bookmarks-section" aria-labelledby="bookmarks-title">
+      <div class="section-heading">
+        <h2 id="bookmarks-title">From Your Bookmarks</h2>
+      </div>
 
-    <section id="cards" class="card-grid" aria-label="AI actions"></section>
-    <p id="empty-state" class="empty-state" hidden>No actions match those filters.</p>
-    <p id="error-state" class="error-state" hidden>The dashboard data could not be loaded. Please try again later.</p>
+      <section class="controls" aria-label="Filter saved ideas">
+        <label class="search-field">
+          <span>Search</span>
+          <input id="search" type="search" placeholder="Search saved ideas and sources" autocomplete="off">
+        </label>
+        <label>
+          <span>Area</span>
+          <select id="area"><option value="All">All areas</option></select>
+        </label>
+        <label>
+          <span>Usefulness</span>
+          <select id="usefulness">
+            <option value="All">All ratings</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+          </select>
+        </label>
+        <button id="clear-filters" class="clear-button" type="button">Clear filters</button>
+      </section>
+
+      <div class="results-heading" aria-live="polite">
+        <strong><span id="result-count">0</span> saved ideas</strong>
+        <span>Newest supporting post first</span>
+      </div>
+
+      <div id="cards" class="card-grid" aria-label="Saved AI ideas"></div>
+      <p id="empty-state" class="empty-state" hidden>No saved ideas match those filters.</p>
+      <p id="error-state" class="error-state" hidden>The dashboard data could not be loaded. Please try again later.</p>
+    </section>
   </main>
 
   <footer>
-    <p>Codeblazar AI News turns selected bookmarks into practical next steps. Sources remain with their original publishers.</p>
+    <p>Codeblazar AI News brings together today’s important stories and ideas from selected bookmarks. Sources remain with their original publishers.</p>
   </footer>
 </body>
 </html>
