@@ -360,11 +360,18 @@ a:focus-visible { outline: 3px solid rgb(36 87 214 / 24%); outline-offset: 2px; 
 .topic-brand-icon.icon-missing span { display: block; }
 
 .action-card h2 {
-  margin: 13px 0 18px;
+  margin: 13px 0 8px;
   color: var(--area-color);
   font-size: 17px;
   line-height: 1.42;
   letter-spacing: -.01em;
+}
+
+.card-summary {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .sources { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }

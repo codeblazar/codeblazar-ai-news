@@ -134,7 +134,7 @@ function render() {
     .filter(record => state.usefulness === "All" || record.usefulness === state.usefulness)
     .filter(record => {
       if (!query) return true;
-      const searchable = [record.area, record.action, ...record.sources.map(source => source.label)].join(" ").toLowerCase();
+      const searchable = [record.area, record.action, record.summary, ...record.sources.map(source => source.label)].join(" ").toLowerCase();
       return searchable.includes(query);
     })
     .sort((a, b) => b.latestPostDate.localeCompare(a.latestPostDate));
@@ -177,6 +177,7 @@ function render() {
             <span class="rating">${escapeHtml(record.usefulness)}</span>
           </div>
           <h2>${escapeHtml(cardHeading(record.action))}</h2>
+          ${record.summary ? `<p class="card-summary">${escapeHtml(record.summary)}</p>` : ""}
           <div class="sources" id="${sourceListId}">${sources}${sourceToggle}</div>
         </div>
       </article>`;
