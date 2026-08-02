@@ -28,6 +28,9 @@ const topicBrands = {
   n8n: { color: "#EA4B71", asset: "n8n.svg", fallback: "n8n" }
 };
 const dataUrl = "https://n8n-nuc.codeblazar.org/webhook/codeblazar-ai-news";
+const dataRetryDelay = 10_000;
+const maxDataRetries = 3;
+let areasPopulated = false;
 
 const weatherDetails = code => {
   if (code === 0) return ["☀️", "Clear"];
@@ -224,22 +227,38 @@ elements.clear.addEventListener("click", () => {
   elements.search.focus();
 });
 
-fetch(dataUrl)
-  .then(response => {
-    if (!response.ok) throw new Error(`Data request failed with ${response.status}`);
-    return response.json();
-  })
-  .then(data => {
-    state.records = Array.isArray(data.records) ? data.records : [];
-    state.topStories = Array.isArray(data.topStories) ? data.topStories : [];
-    elements.updated.textContent = formatDate(data.siteUpdatedAt, true);
-    populateAreas();
-    renderTopStories();
-    render();
-  })
-  .catch(() => {
-    elements.updated.textContent = "Unavailable";
-    elements.error.hidden = false;
-  });
+function loadDashboard(retryCount = 0) {
+  fetch(dataUrl)
+    .then(response => {
+      if (!response.ok) throw new Error(`Data request failed with ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      state.records = Array.isArray(data.records) ? data.records : [];
+      state.topStories = Array.isArray(data.topStories) ? data.topStories : [];
+      elements.updated.textContent = formatDate(data.siteUpdatedAt, true);
+      elements.error.hidden = true;
+      if (!areasPopulated) {
+        populateAreas();
+        areasPopulated = true;
+      }
+      renderTopStories();
+      render();
+
+      if (!state.topStories.length && retryCount < maxDataRetries) {
+        setTimeout(() => loadDashboard(retryCount + 1), dataRetryDelay);
+      }
+    })
+    .catch(() => {
+      if (retryCount < maxDataRetries) {
+        setTimeout(() => loadDashboard(retryCount + 1), dataRetryDelay);
+        return;
+      }
+      elements.updated.textContent = "Unavailable";
+      elements.error.hidden = false;
+    });
+}
+
+loadDashboard();
 
 loadWeather();
